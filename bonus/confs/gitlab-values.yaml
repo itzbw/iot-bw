@@ -1,0 +1,148 @@
+# GitLab Helm Chart Values - Memory Optimized
+global:
+  hosts:
+    domain: localhost
+    https: false
+  ingress:
+    configureCertmanager: false
+    tls:
+      enabled: false
+  
+  # Resource limits for memory optimization
+  resources:
+    requests:
+      cpu: 100m
+      memory: 512Mi
+    limits:
+      cpu: 1000m
+      memory: 1Gi
+
+# Certificate Manager - Disabled to save resources
+certmanager:
+  install: false
+
+# GitLab Runner - Disabled to save resources  
+gitlab-runner:
+  install: false
+
+# PostgreSQL Configuration
+postgresql:
+  install: true
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+  persistence:
+    size: 8Gi
+
+# Redis Configuration
+redis:
+  install: true
+  master:
+    resources:
+      requests:
+        cpu: 50m
+        memory: 128Mi
+      limits:
+        cpu: 200m
+        memory: 256Mi
+
+# MinIO Configuration
+minio:
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
+
+# GitLab Components
+gitlab:
+  webservice:
+    minReplicas: 1
+    maxReplicas: 1
+    resources:
+      requests:
+        cpu: 200m
+        memory: 1Gi
+      limits:
+        cpu: 1000m
+        memory: 2Gi
+    
+  sidekiq:
+    minReplicas: 1
+    maxReplicas: 1
+    resources:
+      requests:
+        cpu: 100m
+        memory: 512Mi
+      limits:
+        cpu: 500m
+        memory: 1Gi
+  
+  gitaly:
+    resources:
+      requests:
+        cpu: 100m
+        memory: 256Mi
+      limits:
+        cpu: 500m
+        memory: 512Mi
+    persistence:
+      size: 50Gi
+  
+  gitlab-shell:
+    minReplicas: 1
+    maxReplicas: 1
+    resources:
+      requests:
+        cpu: 50m
+        memory: 64Mi
+      limits:
+        cpu: 200m
+        memory: 128Mi
+  
+  gitlab-exporter:
+    enabled: true
+    resources:
+      requests:
+        cpu: 25m
+        memory: 32Mi
+      limits:
+        cpu: 100m
+        memory: 64Mi
+  
+  kas:
+    minReplicas: 1
+    maxReplicas: 1
+    resources:
+      requests:
+        cpu: 50m
+        memory: 64Mi
+      limits:
+        cpu: 200m
+        memory: 128Mi
+
+# Prometheus - Disabled to save resources
+prometheus:
+  install: false
+
+# Grafana - Disabled to save resources  
+grafana:
+  enabled: false
+
+# Nginx Ingress - Use minimal resources
+nginx-ingress:
+  enabled: true
+  controller:
+    resources:
+      requests:
+        cpu: 50m
+        memory: 64Mi
+      limits:
+        cpu: 200m
+        memory: 128Mi
